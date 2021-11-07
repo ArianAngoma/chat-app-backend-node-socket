@@ -6,6 +6,7 @@ const cors = require('cors');
 
 /* Importaciones propias */
 const Sockets = require('./sockets');
+const {dbConnection} = require('../database/config');
 
 class Server {
     constructor() {
@@ -18,11 +19,18 @@ class Server {
         /* Configuración de sockets */
         this.io = socketio(this.server);
 
+        /* Conexión a la DB */
+        this.connectDB();
+
         /* Middlewares */
         this.middlewares();
 
         /* Inicializar sockets */
         this.sockets = new Sockets(this.io);
+    }
+
+    async connectDB() {
+        await dbConnection();
     }
 
     middlewares() {
