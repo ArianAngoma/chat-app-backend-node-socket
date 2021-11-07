@@ -13,6 +13,10 @@ class Server {
         this.port = process.env.PORT;
         this.app = express();
 
+        this.path = {
+            auth: '/api/auth'
+        }
+
         /* HTTP Server */
         this.server = http.createServer(this.app);
 
@@ -27,6 +31,9 @@ class Server {
 
         /* Inicializar sockets */
         this.sockets = new Sockets(this.io);
+
+        /* Rutas de la App */
+        this.routes();
     }
 
     async connectDB() {
@@ -34,11 +41,18 @@ class Server {
     }
 
     middlewares() {
+        /* Lectura y parseo del body */
+        this.app.use(express.json());
+
         /* Desplegar el directorio público */
         this.app.use(express.static(path.resolve(__dirname, '../public')));
 
         /* CORS */
         this.app.use(cors());
+    }
+
+    routes() {
+        this.app.use(this.path.auth, require('../routes/auth'));
     }
 
     execute() {
