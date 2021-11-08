@@ -1,9 +1,27 @@
+/* Importaciones propias */
+const User = require('../models/User');
+
 /* Registro de usuario */
-const registerUser = (req, res) => {
-    res.json({
-        ok: true,
-        msg: 'SignUp'
-    });
+const registerUser = async (req, res) => {
+    const {name, email, password} = req.body;
+
+    try {
+        const user = new User({name, email, password});
+
+        /* Guardar en DB */
+        await user.save();
+
+        res.status(201).json({
+            ok: true,
+            user
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el Administrador'
+        });
+    }
 }
 
 /* Iniciar sesión de usuario */
