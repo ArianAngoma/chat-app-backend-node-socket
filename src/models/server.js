@@ -14,7 +14,8 @@ class Server {
         this.app = express();
 
         this.path = {
-            auth: '/api/auth'
+            auth: '/api/auth',
+            messages: '/api/messages'
         }
 
         /* HTTP Server */
@@ -53,6 +54,7 @@ class Server {
 
     routes() {
         this.app.use(this.path.auth, require('../routes/auth'));
+        this.app.use(this.path.messages, require('../routes/message'));
     }
 
     execute() {
