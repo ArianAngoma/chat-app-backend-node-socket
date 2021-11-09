@@ -36,11 +36,39 @@ const registerUser = async (req, res) => {
 }
 
 /* Iniciar sesión de usuario */
-const loginUser = (req, res) => {
-    res.json({
-        ok: true,
-        msg: 'SignIn'
-    });
+const loginUser = async (req, res) => {
+    const {email, password} = req.body;
+
+    try {
+        /* Verificar si el email existe */
+        const user = await User.findOne({email});
+        if (!user) return res.status(400).json({
+            ok: false,
+            msg: `No existe usuario con el email ${email}`
+        });
+
+        /* Verificar la contraseña */
+        const validPassword = bcrypt.compareSync(password, user.password);
+        if (!validPassword) return res.status(400).json({
+            ok: false,
+            msg: 'Password incorrecto'
+        });
+
+        /* Generar JWT */
+        const token = await generateJWT(user.id);
+
+        res.status(201).json({
+            ok: true,
+            user,
+            token
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el Administrador'
+        });
+    }
 }
 
 /* Revalidar Token de usuario */
