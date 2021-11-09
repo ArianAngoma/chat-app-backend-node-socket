@@ -1,5 +1,5 @@
+/* Importaciones propias */
 const Message = require('../models/Message');
-
 
 /* Obtener mensajes */
 const getMessages = async (req, res) => {
