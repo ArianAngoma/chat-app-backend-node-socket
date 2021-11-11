@@ -21,6 +21,9 @@ class Sockets {
             // TODO: Escuchar cuando un cliente manda un mensaje
 
             // TODO: Disconnect
+            socket.on('disconnect', () => {
+                console.log('Cliente desconectado')
+            });
         });
     }
 }
