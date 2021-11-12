@@ -15,6 +15,17 @@ const generateJWT = (uid) => {
     });
 }
 
+const checkJWT = (token) => {
+    try {
+        const {uid} = jwt.verify(token, process.env.SECRET_OR_PRIVATE_KEY_JWT);
+        return [true, uid];
+    } catch (e) {
+        console.log(e);
+        return [false, null];
+    }
+}
+
 module.exports = {
-    generateJWT
+    generateJWT,
+    checkJWT
 }
