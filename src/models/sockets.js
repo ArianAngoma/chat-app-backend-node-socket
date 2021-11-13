@@ -1,6 +1,6 @@
 /* Importaciones propias */
 const {checkJWT} = require('../helpers/jwt');
-const {userConnected, userDisconnected, getUsers} = require('../controllers/sockets');
+const {userConnected, userDisconnected, getUsers, saveMessage} = require('../controllers/sockets');
 
 class Sockets {
     constructor(io) {
@@ -36,8 +36,11 @@ class Sockets {
             this.io.emit('users-list', await getUsers());
 
             /* Escuchar evento de mensaje personal */
-            socket.on('message-personal', (payload) => {
-                console.log(payload)
+            socket.on('message-personal', async (payload) => {
+                // console.log(payload);
+                /* Guardar mensaje en la DB */
+                const message = await saveMessage(payload);
+                // console.log(message);
             });
 
             /* Desconectar cliente */
