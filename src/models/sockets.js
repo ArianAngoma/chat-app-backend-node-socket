@@ -40,7 +40,10 @@ class Sockets {
                 // console.log(payload);
                 /* Guardar mensaje en la DB */
                 const message = await saveMessage(payload);
-                // console.log(message);
+
+                /* Emitir mensaje personal */
+                this.io.to(payload.to).emit('message-personal', message);
+                this.io.to(payload.from).emit('message-personal', message);
             });
 
             /* Desconectar cliente */
