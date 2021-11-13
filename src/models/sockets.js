@@ -29,7 +29,7 @@ class Sockets {
             /* Actualizar usuario si se conecta */
             await userConnected(uid);
 
-            /* Emitir todos los usuario conectados */
+            /* Emitir todos los usuario */
             this.io.emit('users-list', await getUsers());
 
             /* Desconectar cliente */
@@ -38,6 +38,9 @@ class Sockets {
 
                 /* Actualizar usuario si se desconecta */
                 await userDisconnected(uid);
+
+                /* Emitir todos los usuario */
+                this.io.emit('users-list', await getUsers());
             });
         });
     }
